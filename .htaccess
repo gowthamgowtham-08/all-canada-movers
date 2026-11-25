@@ -1,0 +1,45 @@
+# ==============================================================================
+# Top End Van Lines - Clean URL Routing & Canonical Configuration
+# ==============================================================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # 1. Canonical Redirect: Strip /index.html and /index to /
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /(.*)index\.html(\?.*)?\ HTTP/ [NC]
+    RewriteRule ^(.*)index\.html$ /$1 [R=301,L]
+
+    # 2. Canonical Redirect: Redirect any URL ending in .html to extensionless route
+    # (e.g. /about.html -> /about, /services/local-moving.html -> /services/local-moving)
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^\ ]+)\.html(\?.*)?\ HTTP/ [NC]
+    RewriteRule ^([^\ ]+)\.html$ /$1 [R=301,L]
+
+    # 3. Transparent Internal Rewrite: Map extensionless route to physical .html file
+    # If the requested route is not a directory and a corresponding .html file exists, serve it
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+    RewriteRule ^([^\.]+)$ $1.html [NC,L]
+
+    # 4. Direct Crawler Fallbacks for Favicons and Manifest
+    RewriteRule ^favicon\.ico$ assets/favicons/favicon.ico [L]
+    RewriteRule ^apple-touch-icon\.png$ assets/favicons/favicon.webp [L]
+    RewriteRule ^site\.webmanifest$ assets/favicons/site.webmanifest [L]
+
+</IfModule>
+
+# Custom Error Pages
+ErrorDocument 404 /index.html
+
+# Security & MIME Types
+<IfModule mod_mime.c>
+    AddType text/html .html
+    AddType text/css .css
+    AddType application/javascript .js
+    AddType image/webp .webp
+    AddType image/svg+xml .svg
+    AddType image/x-icon .ico
+    AddType image/png .png
+    AddType application/manifest+json .webmanifest
+    AddType font/woff2 .woff2
+</IfModule>

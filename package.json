@@ -1,0 +1,19 @@
+{
+  "name": "topendvanlines",
+  "version": "1.0.0",
+  "description": "Top End Van Lines - Canada-Wide Moving & Logistics Services",
+  "scripts": {
+    "start": "node scripts/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tailwindcss -i ./src/input.css -o ./css/style.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "autoprefixer": "^10.5.5",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^3.4.19"
+  }
+}
